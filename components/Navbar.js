@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Link from 'next/link';
 import {
   Collapse,
   Navbar,
@@ -7,12 +8,9 @@ import {
   Nav,
   NavItem,
   NavLink,
-  UncontrolledDropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-  NavbarText,
 } from 'reactstrap';
+
+import styles from '../styles/util.module.css';
 
 const AppBar = (props) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -22,31 +20,21 @@ const AppBar = (props) => {
   return (
     <div>
       <Navbar color='light' light expand='md'>
-        <NavbarBrand href='/'>reactstrap</NavbarBrand>
+        <NavbarBrand>Ecommerce</NavbarBrand>
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
-          <Nav className='mr-auto' navbar>
+          <Nav className='ml-auto' navbar>
             <NavItem>
-              <NavLink href='/components/'>Components</NavLink>
+              <Link href='/'>
+                <NavLink className={styles.pointer}>Home</NavLink>
+              </Link>
             </NavItem>
             <NavItem>
-              <NavLink href='https://github.com/reactstrap/reactstrap'>
-                GitHub
-              </NavLink>
+              <Link href='/login'>
+                <NavLink className={styles.pointer}>Login</NavLink>
+              </Link>
             </NavItem>
-            <UncontrolledDropdown nav inNavbar>
-              <DropdownToggle nav caret>
-                Options
-              </DropdownToggle>
-              <DropdownMenu right>
-                <DropdownItem>Option 1</DropdownItem>
-                <DropdownItem>Option 2</DropdownItem>
-                <DropdownItem divider />
-                <DropdownItem>Reset</DropdownItem>
-              </DropdownMenu>
-            </UncontrolledDropdown>
           </Nav>
-          <NavbarText>Simple Text</NavbarText>
         </Collapse>
       </Navbar>
     </div>

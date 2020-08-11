@@ -9,12 +9,11 @@ import CartContext from '../components/CartContext';
 export default function Home() {
   const context = useContext(CartContext);
   return (
-    <Layout>
+    <>
       <Head>
         <title>Ecommerce</title>
         <link rel='icon' href='/favicon.ico' />
       </Head>
-      <Button>Hello</Button>
-    </Layout>
+    </>
   );
 }
