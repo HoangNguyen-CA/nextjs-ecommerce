@@ -21,7 +21,6 @@ const AppBar = (props) => {
 
   const firebase = useContext(FirebaseContext);
   const user = useContext(UserContext);
-  console.log(user);
 
   const handleLogout = () => {
     firebase.auth.signOut().then(() => {});
@@ -37,6 +36,11 @@ const AppBar = (props) => {
             <NavItem>
               <Link href='/'>
                 <NavLink className={styles.pointer}>Home</NavLink>
+              </Link>
+            </NavItem>
+            <NavItem>
+              <Link href='/cart'>
+                <NavLink className={styles.pointer}>Cart</NavLink>
               </Link>
             </NavItem>
             {!user ? (

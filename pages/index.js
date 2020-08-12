@@ -1,11 +1,12 @@
 import { useContext, useEffect } from 'react';
 import Head from 'next/head';
 
-import { CartContext } from '../components/Context/CartContext';
+import Product from '../components/Product';
+import { Container, Row, Col } from 'reactstrap';
+
 import { FirebaseContext } from '../components/Context/FirebaseContext';
 
 export default function Home() {
-  const cart = useContext(CartContext);
   const firebase = useContext(FirebaseContext);
 
   useEffect(() => {
@@ -23,6 +24,25 @@ export default function Home() {
         <title>Ecommerce</title>
         <link rel='icon' href='/favicon.ico' />
       </Head>
+      <Container>
+        <Row>
+          <Col xs='12' sm='6' md='4' lg='3' className='my-3'>
+            <Product></Product>
+          </Col>
+          <Col xs='12' sm='6' md='4' lg='3' className='my-3'>
+            <Product></Product>
+          </Col>
+          <Col xs='12' sm='6' md='4' lg='3' className='my-3'>
+            <Product></Product>
+          </Col>
+          <Col xs='12' sm='6' md='4' lg='3' className='my-3'>
+            <Product></Product>
+          </Col>
+          <Col xs='12' sm='6' md='4' lg='3' className='my-3'>
+            <Product></Product>
+          </Col>
+        </Row>
+      </Container>
     </>
   );
 }
