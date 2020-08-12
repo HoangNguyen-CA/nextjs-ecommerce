@@ -7,6 +7,7 @@ import { Form, Button } from 'reactstrap';
 
 const Signup = () => {
   let firebase = useContext(FirebaseContext);
+
   const [controls, setControls] = useState({
     email: {
       type: 'input',
@@ -24,6 +25,8 @@ const Signup = () => {
     },
   });
 
+  const [loading, setLoading] = useState(false);
+
   const handleInputChanged = (event, controlName) => {
     const updatedControls = {
       ...controls,
@@ -37,6 +40,19 @@ const Signup = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setLoading(true);
+    firebase.auth
+      .createUserWithEmailAndPassword(
+        controls.email.value,
+        controls.password.value
+      )
+      .then((cred) => {
+        console.log(cred);
+        setLoading(false);
+      })
+      .catch(() => {
+        setLoading(false);
+      });
   };
 
   return (
