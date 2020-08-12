@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import Head from 'next/head';
+import { FirebaseContext } from '../components/Context/FirebaseContext';
 
 import InputGroup from '../components/Forms/InputGroup';
-import { Form, Button, Container } from 'reactstrap';
+import { Form, Button } from 'reactstrap';
 
-const Login = () => {
+const Signup = () => {
+  let firebase = useContext(FirebaseContext);
   const [controls, setControls] = useState({
     email: {
       type: 'input',
@@ -41,7 +43,7 @@ const Login = () => {
     <div>
       <Head></Head>
       <div className='pb-2 mb-4 border-bottom'>
-        <h1>Login</h1>
+        <h1>Sign Up</h1>
       </div>
       <Form onSubmit={handleSubmit}>
         <InputGroup
@@ -54,4 +56,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Signup;

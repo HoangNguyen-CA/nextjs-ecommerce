@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import Link from 'next/link';
 import {
   Collapse,
@@ -9,6 +9,7 @@ import {
   NavItem,
   NavLink,
 } from 'reactstrap';
+import { FirebaseContext } from './Context/FirebaseContext';
 
 import styles from '../styles/util.module.css';
 
@@ -16,6 +17,12 @@ const AppBar = (props) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggle = () => setIsOpen(!isOpen);
+
+  const firebase = useContext(FirebaseContext);
+
+  const handleLogout = () => {
+    firebase.auth.signOut().then(() => {});
+  };
 
   return (
     <div>
@@ -33,6 +40,16 @@ const AppBar = (props) => {
               <Link href='/login'>
                 <NavLink className={styles.pointer}>Login</NavLink>
               </Link>
+            </NavItem>
+            <NavItem>
+              <Link href='/signup'>
+                <NavLink className={styles.pointer}>Sign Up</NavLink>
+              </Link>
+            </NavItem>
+            <NavItem>
+              <NavLink className={styles.pointer} onClick={handleLogout}>
+                Sign out
+              </NavLink>
             </NavItem>
           </Nav>
         </Collapse>

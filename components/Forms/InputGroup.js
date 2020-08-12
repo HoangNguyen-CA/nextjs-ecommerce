@@ -8,7 +8,7 @@ const InputGroup = (props) => {
     let config = props.controls[el];
     inputElements.push(
       <Input
-        id={el}
+        key={el}
         label={el}
         type={config.type}
         config={config.config}
