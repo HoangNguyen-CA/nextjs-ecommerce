@@ -1,13 +1,22 @@
-import { useContext } from 'react';
-
+import { useContext, useEffect } from 'react';
 import Head from 'next/head';
-import Layout from '../components/Layout';
-import { Button } from 'reactstrap';
-import '../components/Context/CartContext';
-import CartContext from '../components/Context/CartContext';
+
+import { CartContext } from '../components/Context/CartContext';
+import { FirebaseContext } from '../components/Context/FirebaseContext';
 
 export default function Home() {
-  const context = useContext(CartContext);
+  const cart = useContext(CartContext);
+  const firebase = useContext(FirebaseContext);
+
+  useEffect(() => {
+    firebase.db
+      .collection('products')
+      .get()
+      .then((snapshot) => {
+        console.log(snapshot.docs);
+      });
+  }, []);
+
   return (
     <>
       <Head>
