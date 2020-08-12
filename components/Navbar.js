@@ -10,6 +10,7 @@ import {
   NavLink,
 } from 'reactstrap';
 import { FirebaseContext } from './Context/FirebaseContext';
+import { UserContext } from './Context/UserContext';
 
 import styles from '../styles/util.module.css';
 
@@ -19,6 +20,8 @@ const AppBar = (props) => {
   const toggle = () => setIsOpen(!isOpen);
 
   const firebase = useContext(FirebaseContext);
+  const user = useContext(UserContext);
+  console.log(user);
 
   const handleLogout = () => {
     firebase.auth.signOut().then(() => {});
@@ -36,21 +39,26 @@ const AppBar = (props) => {
                 <NavLink className={styles.pointer}>Home</NavLink>
               </Link>
             </NavItem>
-            <NavItem>
-              <Link href='/login'>
-                <NavLink className={styles.pointer}>Login</NavLink>
-              </Link>
-            </NavItem>
-            <NavItem>
-              <Link href='/signup'>
-                <NavLink className={styles.pointer}>Sign Up</NavLink>
-              </Link>
-            </NavItem>
-            <NavItem>
-              <NavLink className={styles.pointer} onClick={handleLogout}>
-                Sign out
-              </NavLink>
-            </NavItem>
+            {!user ? (
+              <>
+                <NavItem>
+                  <Link href='/login'>
+                    <NavLink className={styles.pointer}>Login</NavLink>
+                  </Link>
+                </NavItem>
+                <NavItem>
+                  <Link href='/signup'>
+                    <NavLink className={styles.pointer}>Sign Up</NavLink>
+                  </Link>
+                </NavItem>
+              </>
+            ) : (
+              <NavItem>
+                <NavLink className={styles.pointer} onClick={handleLogout}>
+                  Sign out
+                </NavLink>
+              </NavItem>
+            )}
           </Nav>
         </Collapse>
       </Navbar>
