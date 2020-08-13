@@ -48,7 +48,15 @@ const Signup = () => {
         controls.email.value,
         controls.password.value
       )
-      .then(() => {
+      .then((cred) => {
+        firebase.db
+          .collection('users')
+          .doc(cred.user.uid)
+          .set({
+            cart: [],
+          })
+          .then(() => {});
+
         setLoading(false);
       })
       .catch(() => {
