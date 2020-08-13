@@ -57,11 +57,18 @@ const AppBar = (props) => {
                 </NavItem>
               </>
             ) : (
-              <NavItem>
-                <NavLink className={styles.pointer} onClick={handleLogout}>
-                  Sign out
-                </NavLink>
-              </NavItem>
+              <>
+                <NavItem>
+                  <Link href='/account'>
+                    <NavLink className={styles.pointer}>Account</NavLink>
+                  </Link>
+                </NavItem>
+                <NavItem>
+                  <NavLink className={styles.pointer} onClick={handleLogout}>
+                    Sign out
+                  </NavLink>
+                </NavItem>
+              </>
             )}
           </Nav>
         </Collapse>

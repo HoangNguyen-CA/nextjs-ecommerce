@@ -14,9 +14,9 @@ const Product = (props) => {
         alt='Card image cap'
       />
       <div className={styles.body}>
-        <p className={styles.brand}>Brand</p>
-        <p className={styles.name}>Product Name</p>
-        <p className={styles.price}>$30.29</p>
+        <p className={styles.brand}>{props.brand}</p>
+        <p className={styles.name}>{props.name}</p>
+        <p className={styles.price}>${props.price}</p>
       </div>
     </Card>
   );
