@@ -18,6 +18,7 @@ export const UserProvider = (props) => {
           .then((res) => {
             let cart = res.data().cart;
             user.cart = cart;
+            console.log(cart);
             setUser(user);
           });
       } else {

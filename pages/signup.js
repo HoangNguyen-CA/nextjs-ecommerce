@@ -53,7 +53,7 @@ const Signup = () => {
           .collection('users')
           .doc(cred.user.uid)
           .set({
-            cart: [],
+            cart: {},
           })
           .then(() => {});
 

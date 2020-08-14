@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useContext } from 'react';
 
 import styles from '../../styles/product.module.css';
 
@@ -12,9 +12,28 @@ const Product = (props) => {
 
   const handleAddToCart = () => {
     let cart = user.cart;
-    cart.push(p);
-    firebase.db.collection('users').doc(user.uid).set();
+    let field = cart[props.product.id];
+    if (field) {
+      cart[props.product.id] = field + 1;
+    } else {
+      cart[props.product.id] = 1;
+    }
+
+    firebase.db
+      .collection('users')
+      .doc(user.uid)
+      .set(
+        {
+          cart,
+        },
+        { merge: true }
+      )
+      .then(() => {
+        user.cart = cart;
+        console.log(user.cart);
+      });
   };
+
   return (
     <div>
       <h1>{props.product.id}</h1>
