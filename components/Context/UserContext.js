@@ -8,14 +8,21 @@ export const UserProvider = (props) => {
 
   let [user, setUser] = useState(null);
 
-  useEffect(() => {
+  useEffect(function () {
     firebase.auth.onAuthStateChanged((user) => {
       if (user) {
-        console.log('user logged in:', user);
+        firebase.db
+          .collection('users')
+          .doc(user.uid)
+          .get()
+          .then((res) => {
+            let cart = res.data().cart;
+            user.cart = cart;
+            setUser(user);
+          });
       } else {
-        console.log('user logged out');
+        setUser(user);
       }
-      setUser(user);
     });
   }, []);
 

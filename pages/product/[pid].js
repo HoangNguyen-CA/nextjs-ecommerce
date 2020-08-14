@@ -1,19 +1,29 @@
 import React, { useEffect, useContext } from 'react';
 
+import styles from '../../styles/product.module.css';
+
+import { FirebaseContext } from '../../components/Context/FirebaseContext';
+import { UserContext } from '../../components/Context/UserContext';
+import { Button } from 'reactstrap';
+
 const Product = (props) => {
-  let fields = props.product.fields;
-  let product = {
-    name: fields.name.stringValue,
-    brand: fields.brand.stringValue,
-    price: fields.price.doubleValue,
-    description: fields.description.stringValue,
+  const firebase = useContext(FirebaseContext);
+  let user = useContext(UserContext);
+
+  const handleAddToCart = () => {
+    let cart = user.cart;
+    cart.push(p);
+    firebase.db.collection('users').doc(user.uid).set();
   };
   return (
     <div>
-      <h1>{product.name}</h1>
-      <h1>{product.brand}</h1>
-      <h1>{product.price}</h1>
-      <h1>{product.description}</h1>
+      <h1>{props.product.id}</h1>
+
+      <h1>{props.product.name}</h1>
+      <h1>{props.product.brand}</h1>
+      <h1>{props.product.price}</h1>
+      <h1>{props.product.description}</h1>
+      <Button onClick={handleAddToCart}>Add To Cart</Button>
     </div>
   );
 };
@@ -46,9 +56,20 @@ export async function getStaticProps({ params }) {
 
   let product = await res.json();
 
+  let tempArr = product.name.split('/');
+  let id = tempArr[tempArr.length - 1];
+
+  let fields = product.fields;
+  let updatedProduct = {
+    id: id,
+    name: fields.name.stringValue,
+    brand: fields.brand.stringValue,
+    price: fields.price.doubleValue,
+    description: fields.description.stringValue,
+  };
   return {
     props: {
-      product,
+      product: updatedProduct,
     },
   };
 }

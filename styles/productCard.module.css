@@ -1,0 +1,21 @@
+.body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1em;
+  text-align: center;
+}
+
+.brand {
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 0;
+}
+
+.name {
+  margin-bottom: 0.5em;
+}
+
+.price {
+  margin-bottom: 0;
+}

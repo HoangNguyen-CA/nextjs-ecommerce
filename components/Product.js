@@ -1,7 +1,7 @@
 import router from 'next/router';
 import { Card, CardImg } from 'reactstrap';
 
-import styles from '../styles/product.module.css';
+import styles from '../styles/productCard.module.css';
 import utilStyles from '../styles/util.module.css';
 
 const Product = (props) => {
