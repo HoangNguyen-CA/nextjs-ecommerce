@@ -1,12 +1,15 @@
-import React from 'react';
+import router from 'next/router';
 import { Card, CardImg } from 'reactstrap';
 
 import styles from '../styles/product.module.css';
 import utilStyles from '../styles/util.module.css';
 
 const Product = (props) => {
+  const handleRedirect = () => {
+    router.push(`/product/${props.id}`);
+  };
   return (
-    <Card className={utilStyles.pointer}>
+    <Card className={utilStyles.pointer} onClick={handleRedirect}>
       <CardImg
         top
         width='10em'

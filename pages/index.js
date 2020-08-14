@@ -1,6 +1,5 @@
 import { useContext } from 'react';
 import Head from 'next/head';
-import axios from 'axios';
 
 import Product from '../components/Product';
 import { Container, Row, Col } from 'reactstrap';
@@ -11,11 +10,13 @@ export default function Home(props) {
   let productContent = null;
   if (props.products) {
     productContent = props.products.map((product) => {
+      let tempArr = product.name.split('/');
+      let id = tempArr[tempArr.length - 1];
       let fields = product.fields;
-      console.log(fields);
       return (
-        <Col xs='12' sm='6' md='4' lg='3' className='my-3' key={product.name}>
+        <Col xs='12' sm='6' md='4' lg='3' className='my-3' key={id}>
           <Product
+            id={id}
             name={fields.name.stringValue}
             price={fields.price.doubleValue}
             description={fields.description.stringValue}
@@ -45,6 +46,7 @@ export async function getStaticProps() {
   );
 
   let products = await res.json();
+
   return {
     props: {
       products: products.documents,
