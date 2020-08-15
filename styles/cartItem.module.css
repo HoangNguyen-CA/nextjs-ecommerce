@@ -1,2 +1,22 @@
 .container {
 }
+
+.contentContainer {
+  display: flex;
+}
+
+.contentItem {
+  width: 50%;
+}
+
+.info {
+  font-size: 1.1rem;
+}
+.inputContainer {
+  width: 5rem;
+  margin-left: auto;
+}
+.label {
+  text-align: center;
+  width: 100%;
+}

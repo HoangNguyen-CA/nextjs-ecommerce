@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 
-import { Spinner, Input, Button } from 'reactstrap';
+import { Spinner, Input, Button, Label } from 'reactstrap';
 
 import { FirebaseContext } from '../components/Context/FirebaseContext';
 import { UserContext } from '../components/Context/UserContext';
@@ -44,17 +44,29 @@ const CartItem = (props) => {
   if (product) {
     content = (
       <>
-        <p>{product.name}</p>
-        <p>{product.brand}</p>
-        <p>{product.price}</p>
-        <form onSubmit={handleSubmit}>
-          <Input
-            type='number'
-            value={amount}
-            onChange={handleAmountChanged}
-          ></Input>
-          <Button type='submit'>Update</Button>
-        </form>
+        <div className={styles.contentContainer}>
+          <div className={styles.contentItem}>
+            <h5>{product.name}</h5>
+            <p className={styles.info}>
+              {product.brand}
+              <br></br>Total Price: ${product.price * props.amount}
+            </p>
+          </div>
+
+          <form onSubmit={handleSubmit} className={styles.contentItem}>
+            <div className={styles.inputContainer}>
+              <Label className={styles.label}>Amount:</Label>
+              <Input
+                type='number'
+                value={amount}
+                onChange={handleAmountChanged}
+              ></Input>
+              <Button type='submit' block>
+                Update
+              </Button>
+            </div>
+          </form>
+        </div>
       </>
     );
   }
