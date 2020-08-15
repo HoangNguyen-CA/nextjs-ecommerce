@@ -11,18 +11,7 @@ const CartItem = (props) => {
   let firebase = useContext(FirebaseContext);
   let user = useContext(UserContext);
 
-  let [product, setProduct] = useState(null);
-  let [amount, setAmount] = useState(props.amount);
-
-  useEffect(() => {
-    firebase.db
-      .collection('products')
-      .doc(props.id)
-      .get()
-      .then((res) => {
-        setProduct(res.data());
-      });
-  }, []);
+  let [amount, setAmount] = useState(user.cart[props.item.id]);
 
   let handleAmountChanged = (e) => {
     setAmount(e.target.value);
@@ -31,7 +20,7 @@ const CartItem = (props) => {
   let handleSubmit = (e) => {
     e.preventDefault();
     let updatedCart = user.cart;
-    updatedCart[props.id] = amount;
+    updatedCart[props.item.id] = amount;
     firebase.db.collection('users').doc(user.uid).set(
       {
         cart: updatedCart,
@@ -41,17 +30,17 @@ const CartItem = (props) => {
   };
 
   let content = <Spinner></Spinner>;
-  if (product) {
+  if (props.item) {
     content = (
       <>
         <div className={styles.contentContainer}>
           <div className={styles.contentItem}>
-            <h5>{product.name}</h5>
+            <h5>{props.item.name}</h5>
             <p className={styles.info}>
-              {product.brand}
-              <br></br>Total Price: ${product.price * props.amount}
+              {props.item.brand}
+              <br></br>Total Price: $
+              {(props.item.price * user.cart[props.item.id]).toFixed(2)}
             </p>
-            <h1>{props.amount}</h1>
           </div>
 
           <form onSubmit={handleSubmit} className={styles.contentItem}>
