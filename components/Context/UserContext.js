@@ -16,10 +16,14 @@ export const UserProvider = (props) => {
           .doc(user.uid)
           .get()
           .then((res) => {
-            let cart = res.data().cart;
+            let data = res.data();
+            let cart = data.cart;
+            let orders = data.orders;
             user.cart = cart;
-            console.log(cart);
+            user.orders = orders;
             setUser(user);
+
+            console.log(orders);
           });
       } else {
         setUser(user);

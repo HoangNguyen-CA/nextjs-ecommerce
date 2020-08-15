@@ -59,6 +59,11 @@ const AppBar = (props) => {
             ) : (
               <>
                 <NavItem>
+                  <Link href='/orders'>
+                    <NavLink className={styles.pointer}>Orders</NavLink>
+                  </Link>
+                </NavItem>
+                <NavItem>
                   <Link href='/account'>
                     <NavLink className={styles.pointer}>Account</NavLink>
                   </Link>

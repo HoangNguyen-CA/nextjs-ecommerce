@@ -16,7 +16,7 @@ const Product = (props) => {
     if (field) {
       cart[props.product.id] = field + 1;
     } else {
-      cart[props.product.id] = 1;
+      cart[props.product.id] = +1;
     }
 
     firebase.db

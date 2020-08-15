@@ -54,6 +54,7 @@ const Signup = () => {
           .doc(cred.user.uid)
           .set({
             cart: {},
+            orders: [],
           })
           .then(() => {});
 
