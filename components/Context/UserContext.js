@@ -22,8 +22,6 @@ export const UserProvider = (props) => {
             user.cart = cart;
             user.orders = orders;
             setUser(user);
-
-            console.log(orders);
           });
       } else {
         setUser(user);

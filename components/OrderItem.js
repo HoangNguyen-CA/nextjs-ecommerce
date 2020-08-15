@@ -10,16 +10,16 @@ const orderItem = (props) => {
   useEffect(() => {
     async function getProducts() {
       let requests = [];
-      for (let i in props.order) {
-        requests.push(firebase.db.collection('products').doc(i));
-      }
-      let prods = [];
 
-      for (let req of requests) {
-        let temp = await req.get();
-        let data = temp.data();
-        prods.push(data);
+      for (let i in props.order) {
+        requests.push(firebase.db.collection('products').doc(i).get());
       }
+
+      let resArr = await Promise.all(requests);
+      let prods = resArr.map((i) => ({
+        data: i.data(),
+        amount: props.order[i.id],
+      }));
       setProducts(prods);
     }
 
@@ -28,7 +28,7 @@ const orderItem = (props) => {
 
   let content = '';
   content = products.map((product) => {
-    return <h1 key={product.name}>{product.name}</h1>;
+    return <h1 key={product.data.name}>{product.data.name}</h1>;
   });
 
   return <div>{content}</div>;
