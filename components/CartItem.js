@@ -51,6 +51,7 @@ const CartItem = (props) => {
               {product.brand}
               <br></br>Total Price: ${product.price * props.amount}
             </p>
+            <h1>{props.amount}</h1>
           </div>
 
           <form onSubmit={handleSubmit} className={styles.contentItem}>

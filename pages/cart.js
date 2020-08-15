@@ -13,6 +13,8 @@ const cart = (props) => {
   let cartItems = [];
   if (!user) {
   } else {
+    console.log(user.cart, ' wow');
+
     let cart = user.cart;
     for (let i in cart) {
       cartItems.push(<CartItem key={i} id={i} amount={cart[i]}></CartItem>);
