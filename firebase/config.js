@@ -27,6 +27,12 @@ class Firebase {
     let data = res.data();
     return data;
   };
+
+  setUserData = async (id, data) => {
+    let res = await this.db.collection
+      .doc(id)
+      .set({ ...data }, { merge: true });
+  };
 }
 
 export default Firebase;

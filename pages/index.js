@@ -1,10 +1,7 @@
-import { useContext } from 'react';
 import Head from 'next/head';
 
 import Product from '../components/Product';
 import { Container, Row, Col } from 'reactstrap';
-
-import { FirebaseContext } from '../components/Context/FirebaseContext';
 
 export default function Home(props) {
   let productContent = null;

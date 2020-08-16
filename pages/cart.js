@@ -93,15 +93,20 @@ const Cart = (props) => {
     let updatedCart = { ...cart };
     updatedCart[id] = amount;
 
-    try {
-      let res = await firebase.db.collection('users').doc(user.uid).set(
-        {
-          cart: updatedCart,
-        },
-        { merge: true }
-      );
-    } catch (e) {
-      props.setError(e);
+    if (user) {
+      try {
+        let res = await firebase.db.collection('users').doc(user.uid).set(
+          {
+            cart: updatedCart,
+          },
+          { merge: true }
+        );
+      } catch (e) {
+        props.setError(e);
+      }
+    } else {
+      setCart(updatedCart);
+      localStorage.setItem('cart', JSON.stringify(updatedCart));
     }
   };
 

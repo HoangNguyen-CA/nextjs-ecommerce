@@ -1,5 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 
+import withErrorHandler from '../../components/withErrorHandler';
+
 import styles from '../../styles/product.module.css';
 
 import { FirebaseContext } from '../../components/Context/FirebaseContext';
@@ -30,12 +32,21 @@ const Product = (props) => {
       updatedCart[props.product.id] = +1;
     }
 
-    let res = await firebase.db.collection('users').doc(user.uid).set(
-      {
-        cart: updatedCart,
-      },
-      { merge: true }
-    );
+    if (user) {
+      try {
+        let res = await firebase.db.collection('users').doc(user.uid).set(
+          {
+            cart: updatedCart,
+          },
+          { merge: true }
+        );
+      } catch (e) {
+        props.setError(e);
+      }
+    } else {
+      setCart(updatedCart);
+      localStorage.setItem('cart', JSON.stringify(updatedCart));
+    }
   };
 
   return (
@@ -53,7 +64,7 @@ const Product = (props) => {
   );
 };
 
-export default Product;
+export default withErrorHandler(Product);
 
 export async function getStaticPaths() {
   let res = await fetch(

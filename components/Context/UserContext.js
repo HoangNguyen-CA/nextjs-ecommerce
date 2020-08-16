@@ -38,6 +38,9 @@ export const UserProvider = (props) => {
         });
       } else {
         setUser(null);
+        if (localStorage.getItem('cart')) {
+          setCart(JSON.parse(localStorage.getItem('cart')));
+        }
       }
     });
   }, []);
