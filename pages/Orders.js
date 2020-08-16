@@ -2,20 +2,22 @@ import React, { useContext, useEffect, useState } from 'react';
 
 import { UserContext } from '../components/Context/UserContext';
 import { FirebaseContext } from '../components/Context/FirebaseContext';
+import { OrdersContext } from '../components/Context/OrdersContext';
 
 import OrderItem from '../components/OrderItem';
 
 const Orders = (props) => {
   let user = useContext(UserContext);
   let firebase = useContext(FirebaseContext);
+  let [orders, setOrders] = useContext(OrdersContext);
 
-  let [orders, setOrders] = useState([]);
+  let [loadedOrders, setLoadedOrders] = useState([]);
 
   useEffect(() => {
     async function getOrders() {
       if (user) {
         let updatedOrders = [];
-        for (let order of user.orders) {
+        for (let order of orders) {
           let requests = [];
           for (let id in order.cart) {
             requests.push(firebase.db.collection('products').doc(id).get());
@@ -29,17 +31,17 @@ const Orders = (props) => {
           }));
           updatedOrders.push({ items: data, price: order.price });
         }
-        setOrders(updatedOrders);
+        setLoadedOrders(updatedOrders);
         console.log('OrderItems Updated: ', updatedOrders);
       }
     }
 
     getOrders();
-  }, [user]);
+  }, [orders]);
 
   let content = '';
 
-  content = orders.map((order, index) => (
+  content = loadedOrders.map((order, index) => (
     <OrderItem order={order} key={index}></OrderItem>
   ));
 

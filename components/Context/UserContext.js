@@ -1,10 +1,14 @@
 import React, { createContext, useEffect, useContext, useState } from 'react';
 import { FirebaseContext } from './FirebaseContext';
+import { CartContext } from './CartContext';
+import { OrdersContext } from './OrdersContext';
 
 export const UserContext = createContext();
 
 export const UserProvider = (props) => {
   let firebase = useContext(FirebaseContext);
+  let [cart, setCart] = useContext(CartContext);
+  let [orders, setOrders] = useContext(OrdersContext);
 
   let [user, setUser] = useState(null);
 
@@ -17,25 +21,22 @@ export const UserProvider = (props) => {
       }
       if (resUser) {
         let doc = firebase.db.collection('users').doc(resUser.uid);
-        let res = await doc.get();
-
-        let data = res.data();
-        let cart = data.cart;
-        let orders = data.orders;
-
-        resUser.cart = cart;
-        resUser.orders = orders;
         setUser(resUser);
 
         dbListener = doc.onSnapshot((snapshot) => {
+          console.log('DB CHANGE');
+
           let data = snapshot.data();
-          let updatedUser = { ...resUser };
-          updatedUser.cart = data.cart;
-          updatedUser.orders = data.orders;
-          setUser(updatedUser);
+
+          if (JSON.stringify(cart) !== JSON.stringify(data.cart)) {
+            setCart(data.cart);
+          }
+          if (JSON.stringify(orders) !== JSON.stringify(data.orders)) {
+            setOrders(data.orders);
+          }
         });
       } else {
-        setUser(resUser);
+        setUser(null);
       }
     });
   }, []);

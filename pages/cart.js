@@ -1,5 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
+
 import { UserContext } from '../components/Context/UserContext';
+import { CartContext } from '../components/Context/CartContext';
+import { OrdersContext } from '../components/Context/OrdersContext';
+
 import { FirebaseContext } from '../components/Context/FirebaseContext';
 
 import CartItem from '../components/CartItem';
@@ -10,55 +14,58 @@ const cart = (props) => {
   let firebase = useContext(FirebaseContext);
   let user = useContext(UserContext);
 
-  const [userCart, setUserCart] = useState([]);
-  const [cart, setCart] = useState([]);
+  const [prevCart, setPrevCart] = useState({});
+  const [cart, setCart] = useContext(CartContext);
+  const [orders, setOrders] = useContext(CartContext);
 
-  const compareKeys = (a, b) => {
-    let aKeys = Object.keys(a).sort();
-    let bKeys = Object.keys(b).sort();
-    return JSON.stringify(aKeys) === JSON.stringify(bKeys);
-  };
+  const [loadedCart, setLoadedCart] = useState([]);
 
   const calculatePrice = () => {
     let total = 0;
-    for (let item of cart) {
-      total += user.cart[item.id] * item.price;
+    for (let item of loadedCart) {
+      total += cart[item.id] * item.price;
     }
     return total.toFixed(2);
   };
 
+  const differentKeys = (a, b) => {
+    let tempA = Object.keys(a);
+    let tempB = Object.keys(b);
+
+    if (JSON.stringify(tempA) === JSON.stringify(tempB)) return false;
+    return true;
+  };
+
   useEffect(() => {
     async function getProducts() {
-      if (user) {
-        //only update items if cart changes
-        if (!compareKeys(userCart, user.cart)) {
-          setUserCart(user.cart);
+      if (differentKeys(prevCart, cart)) {
+        //checks if keys changed, then re-render products
+        setPrevCart(cart);
 
-          let requests = [];
-          for (let i in user.cart) {
-            requests.push(firebase.db.collection('products').doc(i).get());
-          }
-
-          let cartItems = await Promise.all(requests);
-          let data = cartItems.map((i) => ({ ...i.data(), id: i.id }));
-          setCart(data);
-          console.log('CartItems Updated: ', data);
+        let requests = [];
+        for (let i in cart) {
+          requests.push(firebase.db.collection('products').doc(i).get());
         }
+
+        let cartItems = await Promise.all(requests);
+        let data = cartItems.map((i) => ({ ...i.data(), id: i.id }));
+        setLoadedCart(data);
+        console.log('CartItems Updated: ', data);
       }
     }
+
     getProducts();
-  }, [user]);
+  }, [cart]);
 
   let cartItems = [];
 
-  for (let item of cart) {
+  for (let item of loadedCart) {
     cartItems.push(<CartItem key={item.id} item={item}></CartItem>);
   }
 
   const handleCheckout = () => {
-    let updatedOrders = user.orders;
-    updatedOrders.push({ cart: user.cart, price: calculatePrice() });
-    console.log(updatedOrders);
+    let updatedOrders = orders;
+    updatedOrders.push({ cart: cart, price: calculatePrice() });
 
     firebase.db.collection('users').doc(user.uid).set(
       {
@@ -67,6 +74,7 @@ const cart = (props) => {
       { merge: true }
     );
   };
+
   return (
     <div>
       {cartItems}

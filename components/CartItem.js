@@ -4,14 +4,16 @@ import { Spinner, Input, Button, Label } from 'reactstrap';
 
 import { FirebaseContext } from '../components/Context/FirebaseContext';
 import { UserContext } from '../components/Context/UserContext';
+import { CartContext } from '../components/Context/CartContext';
 
 import styles from '../styles/cartItem.module.css';
 
 const CartItem = (props) => {
   let firebase = useContext(FirebaseContext);
   let user = useContext(UserContext);
+  let [cart, setCart] = useContext(CartContext);
 
-  let [amount, setAmount] = useState(user.cart[props.item.id]);
+  let [amount, setAmount] = useState(cart[props.item.id]);
 
   let handleAmountChanged = (e) => {
     setAmount(e.target.value);
@@ -19,7 +21,7 @@ const CartItem = (props) => {
 
   let handleSubmit = (e) => {
     e.preventDefault();
-    let updatedCart = user.cart;
+    let updatedCart = { ...cart };
     updatedCart[props.item.id] = amount;
     firebase.db.collection('users').doc(user.uid).set(
       {
@@ -39,7 +41,7 @@ const CartItem = (props) => {
             <p className={styles.info}>
               {props.item.brand}
               <br></br>Total Price: $
-              {(props.item.price * user.cart[props.item.id]).toFixed(2)}
+              {(props.item.price * cart[props.item.id]).toFixed(2)}
             </p>
           </div>
 
