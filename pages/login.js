@@ -11,6 +11,7 @@ import styles from '../styles/form.module.css';
 
 const Login = () => {
   const firebase = useContext(FirebaseContext);
+
   const [controls, setControls] = useState({
     email: {
       type: 'input',
@@ -52,7 +53,7 @@ const Login = () => {
         setLoading(false);
       })
       .catch((error) => {
-        setError(error.message);
+        setError(error);
         setLoading(false);
       });
   };

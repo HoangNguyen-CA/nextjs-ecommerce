@@ -1,5 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 
+import withErrorHandler from '../components/withErrorHandler';
+
 import { UserContext } from '../components/Context/UserContext';
 import { CartContext } from '../components/Context/CartContext';
 import { OrdersContext } from '../components/Context/OrdersContext';
@@ -10,7 +12,7 @@ import CartItem from '../components/CartItem';
 
 import { Button, Alert } from 'reactstrap';
 
-const cart = (props) => {
+const Cart = (props) => {
   let firebase = useContext(FirebaseContext);
   let user = useContext(UserContext);
 
@@ -47,21 +49,23 @@ const cart = (props) => {
           requests.push(firebase.db.collection('products').doc(i).get());
         }
 
-        let cartItems = await Promise.all(requests);
-        let data = cartItems.map((i) => ({ ...i.data(), id: i.id }));
-        setLoadedCart(data);
-        console.log('CartItems Updated: ', data);
+        try {
+          let cartItems = await Promise.all(requests);
+          let data = cartItems.map((i) => ({
+            ...i.data(),
+            id: i.id,
+            amount: cart[i.id],
+          }));
+          setLoadedCart(data);
+          console.log('CartItems Updated: ', data);
+        } catch (e) {
+          this.props.setError(e);
+        }
       }
     }
 
     getProducts();
   }, [cart]);
-
-  let cartItems = [];
-
-  for (let item of loadedCart) {
-    cartItems.push(<CartItem key={item.id} item={item}></CartItem>);
-  }
 
   const handleCheckout = async () => {
     if (Object.keys(cart).length <= 0) {
@@ -71,14 +75,47 @@ const cart = (props) => {
     let updatedOrders = [...orders];
     updatedOrders.push({ cart: cart, price: calculatePrice() });
 
-    await firebase.db.collection('users').doc(user.uid).set(
-      {
-        orders: updatedOrders,
-        cart: [],
-      },
-      { merge: true }
-    );
+    try {
+      await firebase.db.collection('users').doc(user.uid).set(
+        {
+          orders: updatedOrders,
+          cart: [],
+        },
+        { merge: true }
+      );
+    } catch (e) {
+      this.props.setError(e);
+    }
   };
+
+  const handleEditCart = async (e, id, amount) => {
+    e.preventDefault();
+    let updatedCart = { ...cart };
+    updatedCart[id] = amount;
+
+    try {
+      let res = await firebase.db.collection('users').doc(user.uid).set(
+        {
+          cart: updatedCart,
+        },
+        { merge: true }
+      );
+    } catch (e) {
+      props.setError(e);
+    }
+  };
+
+  let cartItems = [];
+
+  for (let item of loadedCart) {
+    cartItems.push(
+      <CartItem
+        key={item.id}
+        item={{ ...item }}
+        editCart={handleEditCart}
+      ></CartItem>
+    );
+  }
 
   if (Object.keys(cart).length <= 0) {
     cartItems = (
@@ -97,4 +134,4 @@ const cart = (props) => {
   return <div>{cartItems}</div>;
 };
 
-export default cart;
+export default withErrorHandler(Cart);

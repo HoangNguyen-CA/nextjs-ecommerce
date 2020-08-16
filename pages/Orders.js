@@ -1,5 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 
+import withErrorHandler from '../components/withErrorHandler';
+
 import { UserContext } from '../components/Context/UserContext';
 import { FirebaseContext } from '../components/Context/FirebaseContext';
 import { OrdersContext } from '../components/Context/OrdersContext';
@@ -24,14 +26,18 @@ const Orders = (props) => {
           for (let id in order.cart) {
             requests.push(firebase.db.collection('products').doc(id).get());
           }
-          let res = await Promise.all(requests);
+          try {
+            let res = await Promise.all(requests);
 
-          let data = res.map((item) => ({
-            id: item.id,
-            ...item.data(),
-            amount: order.cart[item.id],
-          }));
-          updatedOrders.push({ items: data, price: order.price });
+            let data = res.map((item) => ({
+              id: item.id,
+              ...item.data(),
+              amount: order.cart[item.id],
+            }));
+            updatedOrders.push({ items: data, price: order.price });
+          } catch (e) {
+            props.setError(e);
+          }
         }
         setLoadedOrders(updatedOrders);
         console.log('OrderItems Updated: ', updatedOrders);
@@ -58,4 +64,4 @@ const Orders = (props) => {
   return <div>{content}</div>;
 };
 
-export default Orders;
+export default withErrorHandler(Orders);

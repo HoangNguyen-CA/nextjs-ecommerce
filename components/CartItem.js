@@ -1,34 +1,17 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState } from 'react';
 
 import { Spinner, Input, Button, Label } from 'reactstrap';
 
-import { FirebaseContext } from '../components/Context/FirebaseContext';
-import { UserContext } from '../components/Context/UserContext';
 import { CartContext } from '../components/Context/CartContext';
 
 import styles from '../styles/cartItem.module.css';
 
 const CartItem = (props) => {
-  let firebase = useContext(FirebaseContext);
-  let user = useContext(UserContext);
   let [cart, setCart] = useContext(CartContext);
-
   let [amount, setAmount] = useState(cart[props.item.id]);
 
   let handleAmountChanged = (e) => {
     setAmount(e.target.value);
-  };
-
-  let handleSubmit = (e) => {
-    e.preventDefault();
-    let updatedCart = { ...cart };
-    updatedCart[props.item.id] = amount;
-    firebase.db.collection('users').doc(user.uid).set(
-      {
-        cart: updatedCart,
-      },
-      { merge: true }
-    );
   };
 
   let content = <Spinner></Spinner>;
@@ -45,7 +28,10 @@ const CartItem = (props) => {
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} className={styles.contentItem}>
+          <form
+            onSubmit={(e) => props.editCart(e, props.item.id, amount)}
+            className={styles.contentItem}
+          >
             <div className={styles.inputContainer}>
               <Label className={styles.label}>Amount:</Label>
               <Input
