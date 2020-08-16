@@ -16,7 +16,7 @@ const cart = (props) => {
 
   const [prevCart, setPrevCart] = useState({});
   const [cart, setCart] = useContext(CartContext);
-  const [orders, setOrders] = useContext(CartContext);
+  const [orders, setOrders] = useContext(OrdersContext);
 
   const [loadedCart, setLoadedCart] = useState([]);
 
@@ -63,24 +63,34 @@ const cart = (props) => {
     cartItems.push(<CartItem key={item.id} item={item}></CartItem>);
   }
 
-  const handleCheckout = () => {
-    let updatedOrders = orders;
+  const handleCheckout = async () => {
+    if (Object.keys(cart).length <= 0) {
+      return;
+    }
+
+    let updatedOrders = [...orders];
     updatedOrders.push({ cart: cart, price: calculatePrice() });
 
-    firebase.db.collection('users').doc(user.uid).set(
+    await firebase.db.collection('users').doc(user.uid).set(
       {
         orders: updatedOrders,
+        cart: [],
       },
       { merge: true }
     );
   };
 
-  return (
-    <div>
-      {cartItems}
-      <Button onClick={handleCheckout}>Checkout</Button>
-    </div>
-  );
+  if (Object.keys(cart).length <= 0) {
+    cartItems = <h1>Cart Is Empty</h1>;
+  } else {
+    cartItems.push(
+      <Button onClick={handleCheckout} key='SUBMITBUTTON'>
+        Checkout
+      </Button>
+    );
+  }
+
+  return <div>{cartItems}</div>;
 };
 
 export default cart;

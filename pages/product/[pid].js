@@ -40,13 +40,14 @@ const Product = (props) => {
 
   return (
     <div>
-      <h1>{props.product.id}</h1>
+      <h2>{props.product.name}</h2>
+      <h5>{props.product.brand}</h5>
 
-      <h1>{props.product.name}</h1>
-      <h1>{props.product.brand}</h1>
-      <h1>{props.product.price}</h1>
-      <h1>{props.product.description}</h1>
-      <h1>{amountInCart}</h1>
+      <p>{props.product.description}</p>
+      <p className='lead'>
+        <em>${props.product.price}</em>
+      </p>
+      <p className='lead'>{amountInCart} already in cart</p>
       <Button onClick={handleAddToCart}>Add To Cart</Button>
     </div>
   );
