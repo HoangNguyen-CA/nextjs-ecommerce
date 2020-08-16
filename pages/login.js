@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import Head from 'next/head';
-import withErrorHandler from '../components/withErrorHandler';
+import router from 'next/router';
 
 import { FirebaseContext } from '../components/Context/FirebaseContext';
 
@@ -51,6 +51,7 @@ const Login = () => {
       .signInWithEmailAndPassword(controls.email.value, controls.password.value)
       .then(() => {
         setLoading(false);
+        router.push('/');
       })
       .catch((error) => {
         setError(error);

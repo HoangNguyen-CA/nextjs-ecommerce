@@ -1,6 +1,9 @@
 import React, { useState, useContext } from 'react';
 import Head from 'next/head';
+import router from 'next/router';
+
 import { FirebaseContext } from '../components/Context/FirebaseContext';
+import { CartContext } from '../components/Context/CartContext';
 
 import InputGroup from '../components/Forms/InputGroup';
 import { Form, Button, Spinner, Alert } from 'reactstrap';
@@ -9,6 +12,7 @@ import styles from '../styles/form.module.css';
 
 const Signup = () => {
   let firebase = useContext(FirebaseContext);
+  let [cart, setCart] = useContext(CartContext);
 
   const [controls, setControls] = useState({
     email: {
@@ -55,12 +59,13 @@ const Signup = () => {
           .collection('users')
           .doc(cred.user.uid)
           .set({
-            cart: {},
+            cart: cart,
             orders: [],
           })
-          .then(() => {});
-
-        setLoading(false);
+          .then(() => {
+            setLoading(false);
+            router.push('/');
+          });
       })
       .catch((error) => {
         setError(error.message);

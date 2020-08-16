@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
+import router from 'next/router';
 
 import withErrorHandler from '../components/withErrorHandler';
 
@@ -10,13 +11,22 @@ import { FirebaseContext } from '../components/Context/FirebaseContext';
 
 import CartItem from '../components/CartItem';
 
-import { Button, Alert } from 'reactstrap';
+import {
+  Button,
+  Alert,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+} from 'reactstrap';
 
 const Cart = (props) => {
   let firebase = useContext(FirebaseContext);
   let user = useContext(UserContext);
 
   const [prevCart, setPrevCart] = useState({});
+  const [modal, setModal] = useState(false);
+
   const [cart, setCart] = useContext(CartContext);
   const [orders, setOrders] = useContext(OrdersContext);
 
@@ -75,16 +85,20 @@ const Cart = (props) => {
     let updatedOrders = [...orders];
     updatedOrders.push({ cart: cart, price: calculatePrice() });
 
-    try {
-      await firebase.db.collection('users').doc(user.uid).set(
-        {
-          orders: updatedOrders,
-          cart: [],
-        },
-        { merge: true }
-      );
-    } catch (e) {
-      this.props.setError(e);
+    if (user) {
+      try {
+        await firebase.db.collection('users').doc(user.uid).set(
+          {
+            orders: updatedOrders,
+            cart: [],
+          },
+          { merge: true }
+        );
+      } catch (e) {
+        this.props.setError(e);
+      }
+    } else {
+      setModal(true);
     }
   };
 
@@ -108,6 +122,18 @@ const Cart = (props) => {
       setCart(updatedCart);
       localStorage.setItem('cart', JSON.stringify(updatedCart));
     }
+  };
+
+  const toggleModal = () => {
+    setModal(!modal);
+  };
+
+  const goToSignup = () => {
+    router.push('/signup');
+  };
+
+  const goToLogin = () => {
+    router.push('/login');
   };
 
   let cartItems = [];
@@ -136,7 +162,24 @@ const Cart = (props) => {
     );
   }
 
-  return <div>{cartItems}</div>;
+  return (
+    <div>
+      <Modal isOpen={modal} toggle={toggleModal} centered={true} size='sm'>
+        <ModalHeader toggle={toggleModal} style={{ textAlign: 'center' }}>
+          You need to create an account to place an order
+        </ModalHeader>
+        <ModalFooter>
+          <Button color='primary' onClick={goToSignup} block>
+            Sign Up
+          </Button>
+          <Button onClick={goToLogin} block>
+            Login
+          </Button>
+        </ModalFooter>
+      </Modal>
+      {cartItems}
+    </div>
+  );
 };
 
 export default withErrorHandler(Cart);
