@@ -8,7 +8,7 @@ import { FirebaseContext } from '../components/Context/FirebaseContext';
 
 import CartItem from '../components/CartItem';
 
-import { Button } from 'reactstrap';
+import { Button, Alert } from 'reactstrap';
 
 const cart = (props) => {
   let firebase = useContext(FirebaseContext);
@@ -81,7 +81,11 @@ const cart = (props) => {
   };
 
   if (Object.keys(cart).length <= 0) {
-    cartItems = <h1>Cart Is Empty</h1>;
+    cartItems = (
+      <Alert color='danger' style={{ textAlign: 'center' }}>
+        Your cart is empty
+      </Alert>
+    );
   } else {
     cartItems.push(
       <Button onClick={handleCheckout} key='SUBMITBUTTON'>

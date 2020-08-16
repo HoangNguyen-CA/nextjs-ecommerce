@@ -4,6 +4,8 @@ import { UserContext } from '../components/Context/UserContext';
 import { FirebaseContext } from '../components/Context/FirebaseContext';
 import { OrdersContext } from '../components/Context/OrdersContext';
 
+import { Alert } from 'reactstrap';
+
 import OrderItem from '../components/OrderItem';
 
 const Orders = (props) => {
@@ -41,9 +43,17 @@ const Orders = (props) => {
 
   let content = '';
 
-  content = loadedOrders.map((order, index) => (
-    <OrderItem order={order} key={index}></OrderItem>
-  ));
+  if (loadedOrders.length <= 0) {
+    content = (
+      <Alert color='danger' style={{ textAlign: 'center' }}>
+        You have no orders
+      </Alert>
+    );
+  } else {
+    content = loadedOrders.map((order, index) => (
+      <OrderItem order={order} key={index}></OrderItem>
+    ));
+  }
 
   return <div>{content}</div>;
 };

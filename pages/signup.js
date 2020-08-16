@@ -3,7 +3,7 @@ import Head from 'next/head';
 import { FirebaseContext } from '../components/Context/FirebaseContext';
 
 import InputGroup from '../components/Forms/InputGroup';
-import { Form, Button, Spinner } from 'reactstrap';
+import { Form, Button, Spinner, Alert } from 'reactstrap';
 
 import styles from '../styles/form.module.css';
 
@@ -28,6 +28,7 @@ const Signup = () => {
   });
 
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleInputChanged = (event, controlName) => {
     const updatedControls = {
@@ -42,6 +43,7 @@ const Signup = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setError(null);
     setLoading(true);
     firebase.auth
       .createUserWithEmailAndPassword(
@@ -60,7 +62,8 @@ const Signup = () => {
 
         setLoading(false);
       })
-      .catch(() => {
+      .catch((error) => {
+        setError(error.message);
         setLoading(false);
       });
   };
@@ -69,7 +72,8 @@ const Signup = () => {
     <div className={styles.container}>
       <Head></Head>
       <div className='pb-2 mb-4 border-bottom'>
-        <h1 className={styles.header}>Sign Up</h1>
+        <h1 className={[styles.header, 'mb-3'].join(' ')}>Sign Up</h1>
+        {error ? <Alert color='danger'>{error}</Alert> : null}
       </div>
       <Form onSubmit={handleSubmit}>
         <InputGroup
