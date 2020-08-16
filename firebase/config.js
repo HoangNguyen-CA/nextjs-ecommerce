@@ -21,6 +21,12 @@ class Firebase {
     this.auth = firebase.auth();
     this.db = firebase.firestore();
   }
+
+  getUserData = async (id) => {
+    let res = await this.db.collection('users').doc(id).get();
+    let data = res.data();
+    return data;
+  };
 }
 
 export default Firebase;

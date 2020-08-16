@@ -1,37 +1,41 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
 import styles from '../../styles/product.module.css';
 
 import { FirebaseContext } from '../../components/Context/FirebaseContext';
 import { UserContext } from '../../components/Context/UserContext';
+import { CartContext } from '../../components/Context/CartContext';
 import { Button } from 'reactstrap';
 
 const Product = (props) => {
   const firebase = useContext(FirebaseContext);
   let user = useContext(UserContext);
+  let [cart, setCart] = useContext(CartContext);
+  let [amountInCart, setAmountInCart] = useState(0);
 
-  const handleAddToCart = () => {
-    let cart = user.cart;
-    let field = cart[props.product.id];
+  useEffect(() => {
+    if (cart) {
+      if (cart[props.product.id]) {
+        setAmountInCart(cart[props.product.id]);
+      }
+    }
+  }, [cart]);
+
+  const handleAddToCart = async () => {
+    let updatedCart = { ...cart };
+    let field = updatedCart[props.product.id];
     if (field) {
-      cart[props.product.id] = field + 1;
+      updatedCart[props.product.id] = +field + 1;
     } else {
-      cart[props.product.id] = +1;
+      updatedCart[props.product.id] = +1;
     }
 
-    firebase.db
-      .collection('users')
-      .doc(user.uid)
-      .set(
-        {
-          cart,
-        },
-        { merge: true }
-      )
-      .then(() => {
-        user.cart = cart;
-        console.log(user.cart);
-      });
+    let res = await firebase.db.collection('users').doc(user.uid).set(
+      {
+        cart: updatedCart,
+      },
+      { merge: true }
+    );
   };
 
   return (
@@ -42,6 +46,7 @@ const Product = (props) => {
       <h1>{props.product.brand}</h1>
       <h1>{props.product.price}</h1>
       <h1>{props.product.description}</h1>
+      <h1>{amountInCart}</h1>
       <Button onClick={handleAddToCart}>Add To Cart</Button>
     </div>
   );
