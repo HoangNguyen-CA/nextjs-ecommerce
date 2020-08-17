@@ -11,7 +11,15 @@ const Account = () => {
   } else {
     content = <p>Not Signed In</p>;
   }
-  return <div>{content}</div>;
+  return (
+    <div>
+      {' '}
+      <h1 className='mb-4' style={{ textAlign: 'center' }}>
+        Account
+      </h1>
+      {content}
+    </div>
+  );
 };
 
 export default Account;

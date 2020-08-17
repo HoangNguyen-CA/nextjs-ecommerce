@@ -5,10 +5,11 @@ const OrderProductItem = (props) => {
     <div>
       <h5>{props.item.name}</h5>
       <p>
-        ${props.item.price}
+        Price: ${props.item.price}
         <br></br>
-        {props.item.amount}
+        Amount: {props.item.amount}
       </p>
+      <hr></hr>
     </div>
   );
 };

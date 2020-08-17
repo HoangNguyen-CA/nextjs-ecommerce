@@ -110,7 +110,6 @@ const Cart = (props) => {
     } else {
       updatedCart[id] = amount;
     }
-    console.log(updatedCart);
 
     if (user) {
       try {
@@ -169,6 +168,9 @@ const Cart = (props) => {
 
   return (
     <div>
+      <h1 className='mb-4' style={{ textAlign: 'center' }}>
+        Cart
+      </h1>
       <Modal isOpen={modal} toggle={toggleModal} centered={true} size='sm'>
         <ModalHeader toggle={toggleModal} style={{ textAlign: 'center' }}>
           You need to create an account to place an order

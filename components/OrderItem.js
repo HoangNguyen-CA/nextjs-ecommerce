@@ -1,5 +1,7 @@
 import React from 'react';
 
+import styles from '../styles/orderItem.module.css';
+
 import OrderProductItem from '../components/OrderProductItem';
 
 const orderItem = (props) => {
@@ -10,10 +12,9 @@ const orderItem = (props) => {
   }
 
   return (
-    <div>
+    <div className={styles.contentContainer}>
       {items}
-      <p>Total Cost: ${props.order.price}</p>
-      <hr></hr>
+      <p className='mb-0'>Total Cost: ${props.order.price}</p>
     </div>
   );
 };

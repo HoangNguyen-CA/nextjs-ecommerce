@@ -22,7 +22,7 @@ const CartItem = (props) => {
           <div className={styles.contentItem}>
             <h5>{props.item.name}</h5>
             <p className={styles.info}>
-              {props.item.brand}
+              Brand: {props.item.brand}
               <br></br>Total Price: $
               {(props.item.price * cart[props.item.id]).toFixed(2)}
             </p>

@@ -61,7 +61,14 @@ const Orders = (props) => {
     ));
   }
 
-  return <div>{content}</div>;
+  return (
+    <div>
+      <h1 className='mb-4' style={{ textAlign: 'center' }}>
+        Orders
+      </h1>
+      {content}
+    </div>
+  );
 };
 
 export default withErrorHandler(Orders);
