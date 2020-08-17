@@ -61,7 +61,9 @@ const Login = () => {
 
   return (
     <div className={styles.container}>
-      <Head></Head>
+      <Head>
+        <title>Login</title>
+      </Head>
       <div className='pb-2 mb-4 border-bottom'>
         <h1 className={[styles.header, 'mb-3'].join(' ')}>Login</h1>
         {error ? <Alert color='danger'>{error}</Alert> : null}

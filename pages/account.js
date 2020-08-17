@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import Head from 'next/head';
 
 import { UserContext } from '../components/Context/UserContext';
 
@@ -13,7 +14,9 @@ const Account = () => {
   }
   return (
     <div>
-      {' '}
+      <Head>
+        <title>Account</title>
+      </Head>
       <h1 className='mb-4' style={{ textAlign: 'center' }}>
         Account
       </h1>

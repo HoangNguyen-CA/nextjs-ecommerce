@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
+import Head from 'next/head';
 
 import withErrorHandler from '../../components/withErrorHandler';
 
@@ -52,6 +53,10 @@ const Product = (props) => {
 
   return (
     <div className={styles.container}>
+      <Head>
+        <title>{props.product.name}</title>
+      </Head>
+
       <div className={styles.imageContainer}>
         <img src={props.product.image} className={styles.image}></img>
       </div>

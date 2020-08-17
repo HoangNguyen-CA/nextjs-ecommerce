@@ -28,7 +28,7 @@ export default function Home(props) {
   return (
     <>
       <Head>
-        <title>Ecommerce</title>
+        <title>GPUEmporium</title>
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <Container>

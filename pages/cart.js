@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import router from 'next/router';
+import Head from 'next/head';
 
 import withErrorHandler from '../components/withErrorHandler';
 
@@ -11,14 +12,7 @@ import { FirebaseContext } from '../components/Context/FirebaseContext';
 
 import CartItem from '../components/CartItem';
 
-import {
-  Button,
-  Alert,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-} from 'reactstrap';
+import { Button, Alert, Modal, ModalHeader, ModalFooter } from 'reactstrap';
 
 const Cart = (props) => {
   let firebase = useContext(FirebaseContext);
@@ -168,6 +162,9 @@ const Cart = (props) => {
 
   return (
     <div>
+      <Head>
+        <title>Cart</title>
+      </Head>
       <h1 className='mb-4' style={{ textAlign: 'center' }}>
         Cart
       </h1>

@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
+import Head from 'next/head';
 
 import withErrorHandler from '../components/withErrorHandler';
 
@@ -63,6 +64,9 @@ const Orders = (props) => {
 
   return (
     <div>
+      <Head>
+        <title>Cart</title>
+      </Head>
       <h1 className='mb-4' style={{ textAlign: 'center' }}>
         Orders
       </h1>
