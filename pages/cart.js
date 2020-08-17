@@ -13,6 +13,15 @@ import { FirebaseContext } from '../components/Context/FirebaseContext';
 import CartItem from '../components/CartItem';
 
 import { Button, Alert, Modal, ModalHeader, ModalFooter } from 'reactstrap';
+import Spinner from '../components/Spinner';
+
+const differentKeys = (a, b) => {
+  let tempA = Object.keys(a);
+  let tempB = Object.keys(b);
+
+  if (JSON.stringify(tempA) === JSON.stringify(tempB)) return false;
+  return true;
+};
 
 const Cart = (props) => {
   let firebase = useContext(FirebaseContext);
@@ -25,6 +34,7 @@ const Cart = (props) => {
   const [orders, setOrders] = useContext(OrdersContext);
 
   const [loadedCart, setLoadedCart] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const calculatePrice = () => {
     let total = 0;
@@ -32,14 +42,6 @@ const Cart = (props) => {
       total += cart[item.id] * item.price;
     }
     return total.toFixed(2);
-  };
-
-  const differentKeys = (a, b) => {
-    let tempA = Object.keys(a);
-    let tempB = Object.keys(b);
-
-    if (JSON.stringify(tempA) === JSON.stringify(tempB)) return false;
-    return true;
   };
 
   useEffect(() => {
@@ -53,6 +55,7 @@ const Cart = (props) => {
           requests.push(firebase.db.collection('products').doc(i).get());
         }
 
+        setLoading(true);
         try {
           let cartItems = await Promise.all(requests);
           let data = cartItems.map((i) => ({
@@ -60,9 +63,12 @@ const Cart = (props) => {
             id: i.id,
             amount: cart[i.id],
           }));
+
+          setLoading(false);
           setLoadedCart(data);
           console.log('CartItems Updated: ', data);
         } catch (e) {
+          setLoading(false);
           this.props.setError(e);
         }
       }
@@ -146,7 +152,7 @@ const Cart = (props) => {
     );
   }
 
-  if (Object.keys(cart).length <= 0) {
+  if (loadedCart.length <= 0) {
     cartItems = (
       <Alert color='danger' style={{ textAlign: 'center' }}>
         Your cart is empty
@@ -181,7 +187,7 @@ const Cart = (props) => {
           </Button>
         </ModalFooter>
       </Modal>
-      {cartItems}
+      {loading ? <Spinner /> : cartItems}
     </div>
   );
 };

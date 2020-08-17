@@ -8,6 +8,7 @@ import { FirebaseContext } from '../components/Context/FirebaseContext';
 import { OrdersContext } from '../components/Context/OrdersContext';
 
 import { Alert } from 'reactstrap';
+import Spinner from '../components/Spinner';
 
 import OrderItem from '../components/OrderItem';
 
@@ -17,6 +18,7 @@ const OrdersPage = (props) => {
   let [orders, setOrders] = useContext(OrdersContext);
 
   let [loadedOrders, setLoadedOrders] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     async function getOrders() {
@@ -27,6 +29,8 @@ const OrdersPage = (props) => {
           for (let id in order.cart) {
             requests.push(firebase.db.collection('products').doc(id).get());
           }
+
+          setLoading(true);
           try {
             let res = await Promise.all(requests);
 
@@ -37,9 +41,11 @@ const OrdersPage = (props) => {
             }));
             updatedOrders.push({ items: data, price: order.price });
           } catch (e) {
+            setLoading(false);
             props.setError(e);
           }
         }
+        setLoading(false);
         setLoadedOrders(updatedOrders);
         console.log('OrderItems Updated: ', updatedOrders);
       }
@@ -48,16 +54,16 @@ const OrdersPage = (props) => {
     getOrders();
   }, [orders]);
 
-  let content = '';
+  let orderItems = '';
 
   if (loadedOrders.length <= 0) {
-    content = (
+    orderItems = (
       <Alert color='danger' style={{ textAlign: 'center' }}>
         You have no orders
       </Alert>
     );
   } else {
-    content = loadedOrders.map((order, index) => (
+    orderItems = loadedOrders.map((order, index) => (
       <OrderItem order={order} key={index}></OrderItem>
     ));
   }
@@ -70,7 +76,7 @@ const OrdersPage = (props) => {
       <h1 className='mb-4' style={{ textAlign: 'center' }}>
         Orders
       </h1>
-      {content}
+      {loading ? <Spinner /> : orderItems}
     </div>
   );
 };
