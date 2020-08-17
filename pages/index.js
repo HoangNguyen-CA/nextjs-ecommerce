@@ -14,6 +14,7 @@ export default function Home(props) {
         <Col xs='12' sm='6' md='4' lg='3' className='my-3' key={id}>
           <Product
             id={id}
+            image={fields.image.stringValue}
             name={fields.name.stringValue}
             price={fields.price.doubleValue}
             description={fields.description.stringValue}

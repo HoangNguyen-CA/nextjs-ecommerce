@@ -105,7 +105,12 @@ const Cart = (props) => {
   const handleEditCart = async (e, id, amount) => {
     e.preventDefault();
     let updatedCart = { ...cart };
-    updatedCart[id] = amount;
+    if (amount <= 0) {
+      delete updatedCart[id];
+    } else {
+      updatedCart[id] = amount;
+    }
+    console.log(updatedCart);
 
     if (user) {
       try {

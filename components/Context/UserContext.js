@@ -29,12 +29,8 @@ export const UserProvider = (props) => {
 
           let data = snapshot.data();
 
-          if (JSON.stringify(cart) !== JSON.stringify(data.cart)) {
-            setCart(data.cart);
-          }
-          if (JSON.stringify(orders) !== JSON.stringify(data.orders)) {
-            setOrders(data.orders);
-          }
+          setCart(data.cart);
+          setOrders(data.orders);
         });
       } else {
         setUser(null);

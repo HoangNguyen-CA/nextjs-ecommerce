@@ -29,7 +29,7 @@ const AppBar = (props) => {
   return (
     <div>
       <Navbar color='light' light expand='md'>
-        <NavbarBrand>Ecommerce</NavbarBrand>
+        <NavbarBrand>Graphics Card Emporium</NavbarBrand>
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
           <Nav className='ml-auto' navbar>

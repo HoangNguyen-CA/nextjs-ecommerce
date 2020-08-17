@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
+import ReactMarkdown from 'react-markdown';
 
 import withErrorHandler from '../../components/withErrorHandler';
 
@@ -50,16 +51,24 @@ const Product = (props) => {
   };
 
   return (
-    <div>
-      <h2>{props.product.name}</h2>
-      <h5>{props.product.brand}</h5>
+    <div className={styles.container}>
+      <div className={styles.imageContainer}>
+        <img src={props.product.image} className={styles.image}></img>
+      </div>
+      <div className={styles.content}>
+        <h3>{props.product.name}</h3>
+        <h5>Brand: {props.product.brand}</h5>
 
-      <p>{props.product.description}</p>
-      <p className='lead'>
-        <em>${props.product.price}</em>
-      </p>
-      <p className='lead'>{amountInCart} already in cart</p>
-      <Button onClick={handleAddToCart}>Add To Cart</Button>
+        <ReactMarkdown
+          source={props.product.description}
+          escapeHtml={false}
+        ></ReactMarkdown>
+        <p className='lead'>
+          <em>${props.product.price}</em>
+        </p>
+        <p className='lead'>{amountInCart} already in cart</p>
+        <Button onClick={handleAddToCart}>Add To Cart</Button>
+      </div>
     </div>
   );
 };
@@ -98,6 +107,7 @@ export async function getStaticProps({ params }) {
   let fields = product.fields;
   let updatedProduct = {
     id: id,
+    image: fields.image.stringValue,
     name: fields.name.stringValue,
     brand: fields.brand.stringValue,
     price: fields.price.doubleValue,
