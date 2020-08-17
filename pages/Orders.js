@@ -11,7 +11,7 @@ import { Alert } from 'reactstrap';
 
 import OrderItem from '../components/OrderItem';
 
-const Orders = (props) => {
+const OrdersPage = (props) => {
   let user = useContext(UserContext);
   let firebase = useContext(FirebaseContext);
   let [orders, setOrders] = useContext(OrdersContext);
@@ -65,7 +65,7 @@ const Orders = (props) => {
   return (
     <div>
       <Head>
-        <title>Cart</title>
+        <title>orders</title>
       </Head>
       <h1 className='mb-4' style={{ textAlign: 'center' }}>
         Orders
@@ -75,4 +75,4 @@ const Orders = (props) => {
   );
 };
 
-export default withErrorHandler(Orders);
+export default withErrorHandler(OrdersPage);
