@@ -159,11 +159,6 @@ const Cart = (props) => {
       </Alert>
     );
   } else {
-    cartItems.push(
-      <Button onClick={handleCheckout} key='SUBMITBUTTON'>
-        Checkout
-      </Button>
-    );
   }
 
   return (
@@ -187,7 +182,19 @@ const Cart = (props) => {
           </Button>
         </ModalFooter>
       </Modal>
-      {loading ? <Spinner /> : cartItems}
+      {loading ? (
+        <Spinner />
+      ) : (
+        <>
+          {cartItems}
+          {loadedCart.length > 0 ? (
+            <>
+              <h5>Subtotal: ${calculatePrice()}</h5>
+              <Button onClick={handleCheckout}>Checkout</Button>
+            </>
+          ) : null}
+        </>
+      )}
     </div>
   );
 };
