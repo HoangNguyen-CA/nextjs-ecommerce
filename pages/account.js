@@ -1,5 +1,6 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import Head from 'next/head';
+import router from 'next/router';
 
 import styles from '../styles/account.module.css';
 
@@ -7,7 +8,12 @@ import { UserContext } from '../components/Context/UserContext';
 
 const Account = () => {
   const user = useContext(UserContext);
-  console.log(user);
+
+  useEffect(() => {
+    if (!user) {
+      router.push('/');
+    }
+  }, [user]);
 
   let content = null;
   if (user) {
@@ -23,7 +29,7 @@ const Account = () => {
       </div>
     );
   } else {
-    content = <p>Not Signed In</p>;
+    content = null;
   }
   return (
     <div className={styles.container}>

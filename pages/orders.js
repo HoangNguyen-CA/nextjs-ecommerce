@@ -71,7 +71,7 @@ const OrdersPage = (props) => {
   return (
     <div>
       <Head>
-        <title>orders</title>
+        <title>Orders</title>
       </Head>
       <h1 className='mb-4' style={{ textAlign: 'center' }}>
         Orders
