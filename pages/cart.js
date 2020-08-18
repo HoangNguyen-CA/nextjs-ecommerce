@@ -189,8 +189,13 @@ const Cart = (props) => {
           {cartItems}
           {loadedCart.length > 0 ? (
             <>
-              <h5>Subtotal: ${calculatePrice()}</h5>
-              <Button onClick={handleCheckout}>Checkout</Button>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <Button onClick={handleCheckout} className='mr-2'>
+                  Checkout
+                </Button>
+
+                <h5 className='m-0'>Subtotal: ${calculatePrice()}</h5>
+              </div>
             </>
           ) : null}
         </>
