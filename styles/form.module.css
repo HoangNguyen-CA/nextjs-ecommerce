@@ -1,8 +1,9 @@
 .container {
   max-width: 450px;
   border: 1px solid black;
+  border-radius: 5px;
   margin: 0 auto;
-  padding: 1em 1.2em;
+  padding: 1em 1.5em 1.5em;
 }
 
 .bottomrow {
